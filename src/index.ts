@@ -4,6 +4,8 @@ import { marketCode } from './utils/market';
 import { time, numDate } from './utils/time';
 import { klineData, ztItem, zuoZtItem, qsItem, zhouqi } from './types';
 
+export { klineData, ztItem, zuoZtItem, qsItem, zhouqi };
+
 export class dfcfBot {
   static async getKlineData(
     code: string,
