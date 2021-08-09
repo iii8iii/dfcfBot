@@ -4,8 +4,8 @@ import { marketCode } from './utils/market';
 import { time, numDate } from './utils/time';
 import { klineData, ztItem, zuoZtItem, qsItem, zhouqi } from './types';
 
-export class dfcf {
-  async getKlineData(
+export class dfcfBot {
+  static async getKlineData(
     code: string,
     klineType: zhouqi = 'D'
   ): Promise<klineData | undefined> {
@@ -58,7 +58,7 @@ export class dfcf {
     }
   }
 
-  private klineDataJsonParser(data: string[]): klineData {
+  private static klineDataJsonParser(data: string[]): klineData {
     let result: klineData = {
       open: [],
       close: [],
@@ -85,7 +85,7 @@ export class dfcf {
     return result;
   }
 
-  async getZtStocksInfo(fromToday = 0, amount = 100): Promise<ztItem[]> {
+  static async getZtStocksInfo(fromToday = 0, amount = 100): Promise<ztItem[]> {
     try {
       let date = numDate(fromToday);
       const url = `http://push2ex.eastmoney.com/getTopicZTPool?ut=7eea3edcaed734bea9cbfc24409ed989&dpt=wz.ztzt&Pageindex=0&pagesize=${amount}&sort=fbt%3Aasc&date=${date}&_=${time()}`;
@@ -99,7 +99,10 @@ export class dfcf {
     }
   }
 
-  async getZuoZtStocksInfo(fromToday = 0, amount = 100): Promise<zuoZtItem[]> {
+  static async getZuoZtStocksInfo(
+    fromToday = 0,
+    amount = 100
+  ): Promise<zuoZtItem[]> {
     try {
       let date = numDate(fromToday);
       const url = `http://push2ex.eastmoney.com/getYesterdayZTPool?ut=7eea3edcaed734bea9cbfc24409ed989&dpt=wz.ztzt&Pageindex=0&pagesize=${amount}&sort=zs%3Adesc&date=${date}&_=${time()}`;
@@ -113,7 +116,7 @@ export class dfcf {
     }
   }
 
-  async getQsStocksInfo(amount = 100): Promise<qsItem[]> {
+  static async getQsStocksInfo(amount = 100): Promise<qsItem[]> {
     try {
       let date = numDate();
       const url = `http://push2ex.eastmoney.com/getTopicQSPool?ut=7eea3edcaed734bea9cbfc24409ed989&dpt=wz.ztzt&Pageindex=0&pagesize=${amount}&sort=zdp%3Adesc&date=${date}&_=${time()}`;
