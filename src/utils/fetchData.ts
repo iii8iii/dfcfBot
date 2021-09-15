@@ -11,17 +11,22 @@ export async function fetchData(
   url: string,
   msToDely: number,
   retryTimes: number = 2
-) {
-  if (retryTimes > 0) {
-    const response = await got(url);
-    if (response.statusCode !== 200) {
-      retryTimes -= 1;
-      await delay(msToDely);
-      await fetchData(url, msToDely, retryTimes);
+): Promise<object | undefined> {
+  try {
+    if (retryTimes > 0) {
+      const response = await got(url);
+      if (response.statusCode !== 200) {
+        retryTimes = retryTimes - 1;
+        await delay(msToDely);
+        return await fetchData(url, msToDely, retryTimes);
+      } else {
+        return JSON.parse(response.body);
+      }
     } else {
-      return JSON.parse(response.body);
+      return undefined;
     }
-  } else {
+  } catch (error) {
+    console.error('ERROR OCURRED IN FETCHDATA');
     return undefined;
   }
-}
+};
