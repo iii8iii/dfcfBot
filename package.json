@@ -3,7 +3,7 @@
     "access": "public"
   },
   "np": {
-    "content": "dist"
+    "contents": "dist"
   },
   "version": "0.4.0",
   "license": "MIT",
