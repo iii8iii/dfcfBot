@@ -2,16 +2,12 @@
   "publishConfig": {
     "access": "public"
   },
-  "np": {
-    "contents": "dist"
-  },
   "version": "0.4.0",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "engines": {
     "node": ">=10"
