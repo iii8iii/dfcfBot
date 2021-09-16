@@ -29,4 +29,4 @@ export async function fetchData(
     console.error('ERROR OCURRED IN FETCHDATA', error);
     return undefined;
   }
-};
+}
