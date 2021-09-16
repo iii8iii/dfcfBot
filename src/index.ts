@@ -54,7 +54,7 @@ export async function getKlineData(
     }
 
     const data = await fetchData(url, 1000, 3);
-    const klines = data ? data.klines : [];
+    const klines: string[] = data ? data.klines : [];
     return klineDataJsonParser(klines);
   } catch (error) {
     console.log('ERROR OCCURED IN DFCF GETKLINEDATA');
@@ -74,7 +74,7 @@ function klineDataJsonParser(data: string[]): klineData {
     zdf: [],
     hs: [],
   };
-  data.forEach(item => {
+  for (const item of data) {
     let content = item.split(',');
     result.open.push(Number(content[1]));
     result.close.push(Number(content[2]));
@@ -85,7 +85,7 @@ function klineDataJsonParser(data: string[]): klineData {
     result.zf.push(Number(content[7]));
     result.zdf.push(Number(content[8]));
     result.hs.push(Number(content[10]));
-  });
+  }
   return result;
 }
 

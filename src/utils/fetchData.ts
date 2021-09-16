@@ -11,7 +11,7 @@ export async function fetchData(
   url: string,
   msToDely: number,
   retryTimes: number = 2
-): Promise<object | undefined> {
+): Promise<any | undefined> {
   try {
     if (retryTimes > 0) {
       const response = await got(url);
@@ -26,7 +26,7 @@ export async function fetchData(
       return undefined;
     }
   } catch (error) {
-    console.error('ERROR OCURRED IN FETCHDATA');
+    console.error('ERROR OCURRED IN FETCHDATA', error);
     return undefined;
   }
 };
