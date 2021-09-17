@@ -6,9 +6,9 @@ import { fetchData } from './utils/fetchData';
 
 /**
  * get kline data for diffent time
- * @param {string} code
- * @param {zhouqi} [klineType='D']
- * @return {*}  {(Promise<klineData | undefined>)}
+ * @param {string} code 股票代码
+ * @param {zhouqi} [klineType='D'] K线类型：W（周线），D（日线，默认），60m、15m、m（分别为60，15，1分钟线）
+ * @return {*}  {(Promise<klineData | undefined>)} 返回的数据类型为Object,{open: [开], close: [收],high: [高],low: [低],cjl: [成交量],cje: [成交额],zf: [振幅],zdf: [涨跌幅],hs: [换手率],}
  */
 export async function getKlineData(
   code: string,
