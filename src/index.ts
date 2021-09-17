@@ -147,6 +147,8 @@ export async function getQsStocksInfo(amount = 100): Promise<qsItem[]> {
     console.log(url);
 
     let data = await fetchData(url, 10000, 3);
+    console.log('data:', data);
+
     data = data ? data.pool : [];
     return clearKc(data) as qsItem[];
   } catch (error) {
