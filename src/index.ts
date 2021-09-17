@@ -55,7 +55,11 @@ export async function getKlineData(
 
     const data = await fetchData(url, 1000, 3);
     const klines: string[] = data ? data.klines : [];
-    return klineDataJsonParser(klines);
+    if (klines.length) {
+      return klineDataJsonParser(klines);
+    } else {
+      return undefined;
+    }
   } catch (error) {
     console.log('ERROR OCCURED IN DFCF GETKLINEDATA', error);
     return undefined;
@@ -144,10 +148,7 @@ export async function getQsStocksInfo(amount = 100): Promise<qsItem[]> {
   try {
     let date = numDate();
     const url = `http://push2ex.eastmoney.com/getTopicQSPool?ut=7eea3edcaed734bea9cbfc24409ed989&dpt=wz.ztzt&Pageindex=0&pagesize=${amount}&sort=zdp%3Adesc&date=${date}&_=${time()}`;
-
     let data = await fetchData(url, 1000, 3);
-    console.log('data:', data);
-
     data = data ? data.pool : [];
     return clearKc(data) as qsItem[];
   } catch (error) {
