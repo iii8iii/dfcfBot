@@ -144,9 +144,8 @@ export async function getQsStocksInfo(amount = 100): Promise<qsItem[]> {
   try {
     let date = numDate();
     const url = `http://push2ex.eastmoney.com/getTopicQSPool?ut=7eea3edcaed734bea9cbfc24409ed989&dpt=wz.ztzt&Pageindex=0&pagesize=${amount}&sort=zdp%3Adesc&date=${date}&_=${time()}`;
-    console.log(url);
 
-    let data = await fetchData(url, 10000, 3);
+    let data = await fetchData(url, 1000, 3);
     console.log('data:', data);
 
     data = data ? data.pool : [];
