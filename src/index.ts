@@ -57,7 +57,7 @@ export async function getKlineData(
     const klines: string[] = data ? data.klines : [];
     return klineDataJsonParser(klines);
   } catch (error) {
-    console.log('ERROR OCCURED IN DFCF GETKLINEDATA');
+    console.log('ERROR OCCURED IN DFCF GETKLINEDATA', error);
     return undefined;
   }
 }
@@ -106,7 +106,7 @@ export async function getZtStocksInfo(
     data = data ? data.pool : [];
     return clearKc(data) as ztItem[];
   } catch (error) {
-    console.log('ERROR OCCURED IN DFCF GETZTSTOCKSINFO');
+    console.log('ERROR OCCURED IN DFCF GETZTSTOCKSINFO', error);
     return [];
   }
 }
@@ -129,7 +129,7 @@ export async function getZuoZtStocksInfo(
     data = data ? data.pool : [];
     return clearKc(data) as zuoZtItem[];
   } catch (error) {
-    console.log('ERROR OCCURED IN DFCF GETZUOZTSTOCKSINFO');
+    console.log('ERROR OCCURED IN DFCF GETZUOZTSTOCKSINFO', error);
     return [];
   }
 }
@@ -148,7 +148,7 @@ export async function getQsStocksInfo(amount = 100): Promise<qsItem[]> {
     data = data ? data.pool : [];
     return clearKc(data) as qsItem[];
   } catch (error) {
-    console.log('ERROR OCCURED IN DFCF GETQSSTOCKSINFO');
+    console.log('ERROR OCCURED IN DFCF GETQSSTOCKSINFO', error);
     return [];
   }
 }
