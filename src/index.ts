@@ -61,7 +61,7 @@ export async function getKlineData(
         break;
     }
 
-    const data = await fetchData(url, 1000, 3);
+    const { data } = await fetchData(url, 1000, 3);
     const klines: string[] = data ? data.klines : [];
     if (klines.length) {
       return klineDataJsonParser(klines);
@@ -114,7 +114,7 @@ export async function getZtStocksInfo(
   try {
     let date = numDate(fromToday);
     const url = `http://push2ex.eastmoney.com/getTopicZTPool?ut=7eea3edcaed734bea9cbfc24409ed989&dpt=wz.ztzt&Pageindex=0&pagesize=${amount}&sort=fbt%3Aasc&date=${date}&_=${time()}`;
-    let data = await fetchData(url, 1000, 3);
+    let { data } = await fetchData(url, 1000, 3);
     data = data ? data.pool : [];
     return clearKc(data) as ztItem[];
   } catch (error) {
@@ -137,7 +137,7 @@ export async function getZuoZtStocksInfo(
   try {
     let date = numDate(fromToday);
     const url = `http://push2ex.eastmoney.com/getYesterdayZTPool?ut=7eea3edcaed734bea9cbfc24409ed989&dpt=wz.ztzt&Pageindex=0&pagesize=${amount}&sort=zs%3Adesc&date=${date}&_=${time()}`;
-    let data = await fetchData(url, 1000, 3);
+    let { data } = await fetchData(url, 1000, 3);
     data = data ? data.pool : [];
     return clearKc(data) as zuoZtItem[];
   } catch (error) {
@@ -156,7 +156,7 @@ export async function getQsStocksInfo(amount = 100): Promise<qsItem[]> {
   try {
     let date = numDate();
     const url = `http://push2ex.eastmoney.com/getTopicQSPool?ut=7eea3edcaed734bea9cbfc24409ed989&dpt=wz.ztzt&Pageindex=0&pagesize=${amount}&sort=zdp%3Adesc&date=${date}&_=${time()}`;
-    let data = await fetchData(url, 1000, 3);
+    let { data } = await fetchData(url, 1000, 3);
     data = data ? data.pool : [];
     return clearKc(data) as qsItem[];
   } catch (error) {
@@ -199,7 +199,7 @@ export async function getMoneyInStocks(
       url = oneDayUrl;
       break;
   }
-  const data = await fetchData(url, 1000, 3);
+  const { data } = await fetchData(url, 1000, 3);
   if (data && data.diff) {
     let result: stockItem[] = [];
     for (const obj of data.diff) {
@@ -219,7 +219,7 @@ export async function getMoneyInStocks(
 export async function get5minZfStocks() {
   const url =
     'https://54.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=50&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f11&fs=m:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23&fields=f12';
-  const data = await fetchData(url, 1000, 3);
+  const { data } = await fetchData(url, 1000, 3);
   if (data && data.diff) {
     let result: stockItem[] = [];
     for (const obj of data.diff) {
@@ -230,4 +230,25 @@ export async function get5minZfStocks() {
   } else {
     return [];
   }
+}
+
+/**
+ * 抓取当天停牌的股票，主要用来将他们排除
+ * @return {*}
+ */
+export async function getTpStocks() {
+  const url = `https://datainterface.eastmoney.com/EM_DataCenter/JS.aspx?sr=-1&ps=500&p=1&type=FD&sty=SRB&js=[(x)]&fd=${numDate(
+    0,
+    '-'
+  )}`;
+  const data = await fetchData(url, 1000, 3);
+  let result: stockItem[] = [];
+  if (data && data.length) {
+    for (const item of data) {
+      //"002668,ST奥马,2021-09-27 09:30,2021-09-29 15:00,连续停牌,刊登重要公告,,2021-09-27,2021-09-30"
+      const code: string = item.split(',')[0];
+      result.push({ c: code });
+    }
+  }
+  return result;
 }

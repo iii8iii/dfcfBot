@@ -15,12 +15,8 @@ export async function fetchData(
   try {
     if (retryTimes > 0) {
       const response = await got(url);
-      if (
-        200 === response.statusCode &&
-        response.body &&
-        JSON.parse(response.body).data
-      ) {
-        return JSON.parse(response.body).data;
+      if (200 === response.statusCode && response.body) {
+        return JSON.parse(response.body);
       } else {
         retryTimes = retryTimes - 1;
         await delay(msToDely);
