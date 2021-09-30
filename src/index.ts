@@ -1,4 +1,12 @@
-import { klineData, ztItem, zuoZtItem, qsItem, zhouqi } from './types';
+import {
+  klineData,
+  ztItem,
+  zuoZtItem,
+  qsItem,
+  zhouqi,
+  zhouqi4money,
+  stockItem,
+} from './types';
 import { time, numDate } from './utils/time';
 import { marketCode } from './utils/market';
 import { clearKc } from './utils/clearKc';
@@ -153,6 +161,73 @@ export async function getQsStocksInfo(amount = 100): Promise<qsItem[]> {
     return clearKc(data) as qsItem[];
   } catch (error) {
     console.log('ERROR OCCURED IN DFCF GETQSSTOCKSINFO', error);
+    return [];
+  }
+}
+
+/**
+ * 抓取资金净流入前50的股票，只返回股票代码数组，周期分别当天，三天，五天，十天
+ * @param {zhouqi4money} zhouqi
+ * @return {*}  {Promise<stockItem[]>}
+ */
+export async function getMoneyInStocks(
+  zhouqi?: zhouqi4money
+): Promise<stockItem[]> {
+  let url: string = '';
+  const oneDayUrl =
+    'http://push2.eastmoney.com/api/qt/clist/get?fid=f62&po=1&pz=50&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2&fields=f12';
+  const threeDaysUrl =
+    'http://push2.eastmoney.com/api/qt/clist/get?fid=f267&po=1&pz=50&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2&fields=f12';
+  const fiveDaysUrl =
+    'http://push2.eastmoney.com/api/qt/clist/get?fid=f164&po=1&pz=50&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2&fields=f12';
+  const tenDaysUrl =
+    'http://push2.eastmoney.com/api/qt/clist/get?fid=f174&po=1&pz=50&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2&fields=f12';
+  switch (zhouqi) {
+    case 1:
+      url = oneDayUrl;
+      break;
+    case 3:
+      url = threeDaysUrl;
+      break;
+    case 5:
+      url = fiveDaysUrl;
+      break;
+    case 10:
+      url = tenDaysUrl;
+      break;
+    default:
+      url = oneDayUrl;
+      break;
+  }
+  const data = await fetchData(url, 1000, 3);
+  if (data && data.diff) {
+    let result: stockItem[] = [];
+    for (const obj of data.diff) {
+      result.push({ c: obj['f12'] });
+    }
+    result = clearKc(result);
+    return result;
+  } else {
+    return [];
+  }
+}
+
+/**
+ * 获取五分钟涨幅前50支股票，只会返回股票编码
+ * @return {*}
+ */
+export async function get5minZfStocks() {
+  const url =
+    'https://54.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=50&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f11&fs=m:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23&fields=f12';
+  const data = await fetchData(url, 1000, 3);
+  if (data && data.diff) {
+    let result: stockItem[] = [];
+    for (const obj of data.diff) {
+      result.push({ c: obj['f12'] });
+    }
+    result = clearKc(result);
+    return result;
+  } else {
     return [];
   }
 }
