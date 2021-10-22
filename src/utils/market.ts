@@ -1,3 +1,4 @@
+import { issh, issz } from "./shsz";
 export const marketCode = (code: string) => {
   const zero = issz(code) ? '0' : issh(code) ? '1' : undefined;
   if (zero) {
@@ -9,5 +10,4 @@ export const marketCode = (code: string) => {
 };
 
 
-const issz = (code: string) => /^(000|001|002|003|300|301)\d{3}$/.test(code);
-const issh = (code: string) => /^(600|601|603|605|688|689)\d{3}$/.test(code);
+
