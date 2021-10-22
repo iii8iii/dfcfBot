@@ -15,7 +15,6 @@ describe('marketCode', () => {
     expect(marketCode('601123')).toBe('1.601123');
     expect(marketCode('603123')).toBe('1.603123');
     expect(marketCode('605123')).toBe('1.605123');
-    expect(marketCode('688123')).toBe('1.688123');
   });
   it('others should be ""', () => {
     expect(marketCode('123456')).toBe('');
