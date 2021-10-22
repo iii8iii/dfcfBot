@@ -1,4 +1,4 @@
-import { issh, issz } from "./shsz";
+import { issh, issz } from './shsz';
 export const marketCode = (code: string) => {
   const zero = issz(code) ? '0' : issh(code) ? '1' : undefined;
   if (zero) {
@@ -8,6 +8,3 @@ export const marketCode = (code: string) => {
     return '';
   }
 };
-
-
-

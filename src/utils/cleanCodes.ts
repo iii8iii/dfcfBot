@@ -1,7 +1,5 @@
 import { stockItem } from '../types';
-import { differenceBy } from "lodash";
-import { issh, issz } from "./shsz";
-import { getTpStocks } from "../index";
+import { issh, issz } from './shsz';
 
 /**
  * 删除科创版股票代码
@@ -9,10 +7,8 @@ import { getTpStocks } from "../index";
  * @return {*}
  */
 export async function cleanCodes(data: stockItem[]) {
-  const tp = await getTpStocks();
   if (data.length) {
-    data = data.filter((s: stockItem) => issz(s.c) || issh(s.c));
-    return differenceBy(data, tp, 'c');
+    return data.filter((s: stockItem) => issz(s.c) || issh(s.c));
   }
   return [];
 }

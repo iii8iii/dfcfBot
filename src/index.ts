@@ -116,7 +116,7 @@ export async function getZtStocksInfo(
     const url = `http://push2ex.eastmoney.com/getTopicZTPool?ut=7eea3edcaed734bea9cbfc24409ed989&dpt=wz.ztzt&Pageindex=0&pagesize=${amount}&sort=fbt%3Aasc&date=${date}&_=${time()}`;
     let { data } = await fetchData(url, 1000, 3);
     data = data ? data.pool : [];
-    return cleanCodes(data) as ztItem[];
+    return (await cleanCodes(data)) as ztItem[];
   } catch (error) {
     console.log('ERROR OCCURED IN DFCF GETZTSTOCKSINFO', error);
     return [];
@@ -139,7 +139,7 @@ export async function getZuoZtStocksInfo(
     const url = `http://push2ex.eastmoney.com/getYesterdayZTPool?ut=7eea3edcaed734bea9cbfc24409ed989&dpt=wz.ztzt&Pageindex=0&pagesize=${amount}&sort=zs%3Adesc&date=${date}&_=${time()}`;
     let { data } = await fetchData(url, 1000, 3);
     data = data ? data.pool : [];
-    return cleanCodes(data) as zuoZtItem[];
+    return (await cleanCodes(data)) as zuoZtItem[];
   } catch (error) {
     console.log('ERROR OCCURED IN DFCF GETZUOZTSTOCKSINFO', error);
     return [];
@@ -158,7 +158,7 @@ export async function getQsStocksInfo(amount = 100): Promise<qsItem[]> {
     const url = `http://push2ex.eastmoney.com/getTopicQSPool?ut=7eea3edcaed734bea9cbfc24409ed989&dpt=wz.ztzt&Pageindex=0&pagesize=${amount}&sort=zdp%3Adesc&date=${date}&_=${time()}`;
     let { data } = await fetchData(url, 1000, 3);
     data = data ? data.pool : [];
-    return cleanCodes(data) as qsItem[];
+    return (await cleanCodes(data)) as qsItem[];
   } catch (error) {
     console.log('ERROR OCCURED IN DFCF GETQSSTOCKSINFO', error);
     return [];
@@ -205,7 +205,7 @@ export async function getMoneyInStocks(
     for (const obj of data.diff) {
       result.push({ c: obj['f12'] });
     }
-    result = cleanCodes(result);
+    result = await cleanCodes(result);
     return result;
   } else {
     return [];
@@ -225,7 +225,7 @@ export async function get5minZfStocks() {
     for (const obj of data.diff) {
       result.push({ c: obj['f12'] });
     }
-    result = cleanCodes(result);
+    result = await cleanCodes(result);
     return result;
   } else {
     return [];
