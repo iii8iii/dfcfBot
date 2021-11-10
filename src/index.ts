@@ -270,4 +270,3 @@ export async function getZlStocks(pz: number = 50) {
   }
   return result;
 }
-getZlStocks();
