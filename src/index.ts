@@ -253,8 +253,12 @@ export async function getTpStocks() {
   return result;
 }
 
-export async function getZlStocks() {
-  const url = `http://push2.eastmoney.com/api/qt/clist/get?fid=f184&po=1&pz=500&pn=1&np=1&fltt=2&invt=2&fields=f12&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2`;
+/**
+ * 主力占比前500
+ * @return {*}
+ */
+export async function getZlStocks(pz: number = 500) {
+  const url = `http://push2.eastmoney.com/api/qt/clist/get?fid=f184&po=1&pz=${pz}&pn=1&np=1&fltt=2&invt=2&fields=f12&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2`;
   let result: stockItem[] = [];
   const data = await fetchData(url, 1000, 3);
   if (data && data.diff) {
