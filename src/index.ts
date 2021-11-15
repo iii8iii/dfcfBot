@@ -173,41 +173,46 @@ export async function getQsStocksInfo(amount = 100): Promise<qsItem[]> {
 export async function getMoneyInStocks(
   zhouqi?: zhouqi4money
 ): Promise<stockItem[]> {
-  let url: string = '';
-  const oneDayUrl =
-    'http://push2.eastmoney.com/api/qt/clist/get?fid=f62&po=1&pz=50&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2&fields=f12';
-  const threeDaysUrl =
-    'http://push2.eastmoney.com/api/qt/clist/get?fid=f267&po=1&pz=50&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2&fields=f12';
-  const fiveDaysUrl =
-    'http://push2.eastmoney.com/api/qt/clist/get?fid=f164&po=1&pz=50&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2&fields=f12';
-  const tenDaysUrl =
-    'http://push2.eastmoney.com/api/qt/clist/get?fid=f174&po=1&pz=50&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2&fields=f12';
-  switch (zhouqi) {
-    case 1:
-      url = oneDayUrl;
-      break;
-    case 3:
-      url = threeDaysUrl;
-      break;
-    case 5:
-      url = fiveDaysUrl;
-      break;
-    case 10:
-      url = tenDaysUrl;
-      break;
-    default:
-      url = oneDayUrl;
-      break;
-  }
-  const { data } = await fetchData(url, 1000, 3);
-  if (data && data.diff) {
-    let result: stockItem[] = [];
-    for (const obj of data.diff) {
-      result.push({ c: obj['f12'] });
+  try {
+    let url: string = '';
+    const oneDayUrl =
+      'http://push2.eastmoney.com/api/qt/clist/get?fid=f62&po=1&pz=50&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2&fields=f12';
+    const threeDaysUrl =
+      'http://push2.eastmoney.com/api/qt/clist/get?fid=f267&po=1&pz=50&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2&fields=f12';
+    const fiveDaysUrl =
+      'http://push2.eastmoney.com/api/qt/clist/get?fid=f164&po=1&pz=50&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2&fields=f12';
+    const tenDaysUrl =
+      'http://push2.eastmoney.com/api/qt/clist/get?fid=f174&po=1&pz=50&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2&fields=f12';
+    switch (zhouqi) {
+      case 1:
+        url = oneDayUrl;
+        break;
+      case 3:
+        url = threeDaysUrl;
+        break;
+      case 5:
+        url = fiveDaysUrl;
+        break;
+      case 10:
+        url = tenDaysUrl;
+        break;
+      default:
+        url = oneDayUrl;
+        break;
     }
-    result = await cleanCodes(result);
-    return result;
-  } else {
+    const { data } = await fetchData(url, 1000, 3);
+    if (data && data.diff) {
+      let result: stockItem[] = [];
+      for (const obj of data.diff) {
+        result.push({ c: obj['f12'] });
+      }
+      result = await cleanCodes(result);
+      return result;
+    } else {
+      return [];
+    }
+  } catch (error) {
+    console.log('EORRO OCURRED IN getMoneyInStocks', error);
     return [];
   }
 }
@@ -217,17 +222,22 @@ export async function getMoneyInStocks(
  * @return {*}
  */
 export async function get5minZfStocks() {
-  const url =
-    'https://54.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=50&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f11&fs=m:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23&fields=f12';
-  const { data } = await fetchData(url, 1000, 3);
-  if (data && data.diff) {
-    let result: stockItem[] = [];
-    for (const obj of data.diff) {
-      result.push({ c: obj['f12'] });
+  try {
+    const url =
+      'https://54.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=50&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f11&fs=m:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23&fields=f12';
+    const { data } = await fetchData(url, 1000, 3);
+    if (data && data.diff) {
+      let result: stockItem[] = [];
+      for (const obj of data.diff) {
+        result.push({ c: obj['f12'] });
+      }
+      result = await cleanCodes(result);
+      return result;
+    } else {
+      return [];
     }
-    result = await cleanCodes(result);
-    return result;
-  } else {
+  } catch (error) {
+    console.log('EORRO OCURRED IN get5minZfStocks', error);
     return [];
   }
 }
@@ -237,20 +247,25 @@ export async function get5minZfStocks() {
  * @return {*}
  */
 export async function getTpStocks() {
-  const url = `https://datainterface.eastmoney.com/EM_DataCenter/JS.aspx?sr=-1&ps=500&p=1&type=FD&sty=SRB&js=[(x)]&fd=${numDate(
-    0,
-    '-'
-  )}`;
-  const data = await fetchData(url, 1000, 3);
-  let result: stockItem[] = [];
-  if (data && data.length) {
-    for (const item of data) {
-      //"002668,ST奥马,2021-09-27 09:30,2021-09-29 15:00,连续停牌,刊登重要公告,,2021-09-27,2021-09-30"
-      const code: string = item.split(',')[0];
-      result.push({ c: code });
+  try {
+    const url = `https://datainterface.eastmoney.com/EM_DataCenter/JS.aspx?sr=-1&ps=500&p=1&type=FD&sty=SRB&js=[(x)]&fd=${numDate(
+      0,
+      '-'
+    )}`;
+    const data = await fetchData(url, 1000, 3);
+    let result: stockItem[] = [];
+    if (data && data.length) {
+      for (const item of data) {
+        //"002668,ST奥马,2021-09-27 09:30,2021-09-29 15:00,连续停牌,刊登重要公告,,2021-09-27,2021-09-30"
+        const code: string = item.split(',')[0];
+        result.push({ c: code });
+      }
     }
+    return result;
+  } catch (error) {
+    console.log('EORRO OCURRED IN getTpStocks', error);
+    return [];
   }
-  return result;
 }
 
 /**
@@ -259,14 +274,19 @@ export async function getTpStocks() {
  * @return {*}
  */
 export async function getZlStocks(pz: number = 50) {
-  const url = `http://push2.eastmoney.com/api/qt/clist/get?fid=f184&po=1&pz=${pz}&pn=1&np=1&fltt=2&invt=2&fields=f12&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2`;
-  let result: stockItem[] = [];
-  const { data } = await fetchData(url, 1000, 3);
-  if (data && data.diff) {
-    for (const item of data.diff) {
-      result.push({ c: item['f12'] });
+  try {
+    const url = `http://push2.eastmoney.com/api/qt/clist/get?fid=f184&po=1&pz=${pz}&pn=1&np=1&fltt=2&invt=2&fields=f12&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2`;
+    let result: stockItem[] = [];
+    const { data } = await fetchData(url, 1000, 3);
+    if (data && data.diff) {
+      for (const item of data.diff) {
+        result.push({ c: item['f12'] });
+      }
+      result = await cleanCodes(result);
     }
-    result = await cleanCodes(result);
+    return result;
+  } catch (error) {
+    console.log('EORRO OCURRED IN getZlStocks', error);
+    return [];
   }
-  return result;
 }
