@@ -70,6 +70,12 @@ export interface qsItem {
   hybk: string;
 }
 
+export interface zlItem {
+  c: string;
+  p: number;
+  zdp: number;
+  zlp: number;
+}
 export type zhouqi = 'W' | 'D' | '60m' | '15m' | 'm';
 
 export type zhouqi4money = 1 | 3 | 5 | 10;
