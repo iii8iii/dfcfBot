@@ -309,6 +309,7 @@ export async function getZlStocks(pz: number = 50): Promise<zlItem[]> {
  * @return {*}  {Promise<stockItem[]>}
  */
 export async function getLyStocks(): Promise<stockItem[]> {
+  //why this is not update
   try {
     const url = `https://57.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=70&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f104&fs=m:90+t:2+f:!50&fields=f128,f140`;
     let result: stockItem[] = [];
