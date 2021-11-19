@@ -7,6 +7,7 @@ import {
   zhouqi4money,
   stockItem,
   zlItem,
+  jeItem,
 } from './types';
 import { time, numDate } from './utils/time';
 import { marketCode } from './utils/market';
@@ -173,17 +174,17 @@ export async function getQsStocksInfo(amount = 100): Promise<qsItem[]> {
  */
 export async function getMoneyInStocks(
   zhouqi?: zhouqi4money
-): Promise<stockItem[]> {
+): Promise<jeItem[]> {
   try {
     let url: string = '';
     const oneDayUrl =
-      'http://push2.eastmoney.com/api/qt/clist/get?fid=f62&po=1&pz=50&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2&fields=f12';
+      'http://push2.eastmoney.com/api/qt/clist/get?fid=f62&po=1&pz=50&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2&fields=f2,f3,f12,f62';
     const threeDaysUrl =
-      'http://push2.eastmoney.com/api/qt/clist/get?fid=f267&po=1&pz=50&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2&fields=f12';
+      'http://push2.eastmoney.com/api/qt/clist/get?fid=f267&po=1&pz=50&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2&fields=f2,f127,f12,f267';
     const fiveDaysUrl =
-      'http://push2.eastmoney.com/api/qt/clist/get?fid=f164&po=1&pz=50&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2&fields=f12';
+      'http://push2.eastmoney.com/api/qt/clist/get?fid=f164&po=1&pz=50&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2&fields=f2,f109,f12,f164';
     const tenDaysUrl =
-      'http://push2.eastmoney.com/api/qt/clist/get?fid=f174&po=1&pz=50&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2&fields=f12';
+      'http://push2.eastmoney.com/api/qt/clist/get?fid=f174&po=1&pz=50&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2&fields=f2,f160,f12,f174';
     switch (zhouqi) {
       case 1:
         url = oneDayUrl;
@@ -203,11 +204,16 @@ export async function getMoneyInStocks(
     }
     const { data } = await fetchData(url, 1000, 3);
     if (data && data.diff) {
-      let result: stockItem[] = [];
+      let result: jeItem[] = [];
       for (const obj of data.diff) {
-        result.push({ c: obj['f12'] });
+        const { f2, f12, f62, f267, f164, f174, f3, f127, f109, f160 } = obj;
+        const c = f12;
+        const p = f2;
+        const zdp = f3 ? f3 : f127 ? f127 : f109 ? f109 : f160 ? f160 : 0;
+        const je = f62 ? f62 : f267 ? f267 : f164 ? f164 : f174 ? f174 : 0;
+        result.push({ c, p, zdp, je });
       }
-      result = await cleanCodes(result);
+      result = (await cleanCodes(result)) as jeItem[];
       return result;
     } else {
       return [];
@@ -294,6 +300,28 @@ export async function getZlStocks(pz: number = 50): Promise<zlItem[]> {
     return result;
   } catch (error) {
     console.log('EORRO OCURRED IN getZlStocks', error);
+    return [];
+  }
+}
+
+/**
+ * 行业领涨股，龙一
+ * @return {*}  {Promise<stockItem[]>}
+ */
+export async function getLyStocks(): Promise<stockItem[]> {
+  try {
+    const url = `https://57.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=70&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f104&fs=m:90+t:2+f:!50&fields=f128,f140`;
+    let result: stockItem[] = [];
+    const { data } = await fetchData(url, 1000, 3);
+    if (data && data.diff) {
+      for (const item of data.diff) {
+        result.push({ c: item['f140'] });
+      }
+    }
+    result = await cleanCodes(result);
+    return result;
+  } catch (error) {
+    console.error('DFCFBOT->getLyStocks:', error);
     return [];
   }
 }
