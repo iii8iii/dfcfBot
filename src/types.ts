@@ -29,7 +29,7 @@ export interface ztItem {
   fund: number; //封板资金
   zbc: number; //炸板次
   hybk: string; //行业
-  zttj: { days: number; ct: number }; //涨停统计
+  zttj: { days: number; ct: number; }; //涨停统计
 }
 
 export interface zuoZtItem {
@@ -48,7 +48,7 @@ export interface zuoZtItem {
   yfbt: number; //昨天封板时间
   ylbc: number; //昨天连板数
   hybk: string;
-  zttj: { days: number; ct: number };
+  zttj: { days: number; ct: number; };
 }
 export interface qsItem {
   c: string;
@@ -66,18 +66,20 @@ export interface qsItem {
   cc: number;
   lb: number; //量比
   zs: number;
-  zttj: { days: number; ct: number };
+  zttj: { days: number; ct: number; };
   hybk: string;
 }
 
 export interface zlItem {
   c: string;
+  n: string;
   p: number;
   zdp: number;
   zlp: number;
 }
 export interface jeItem {
   c: string;
+  n: string;
   p: number;
   zdp: number;
   je: number;
