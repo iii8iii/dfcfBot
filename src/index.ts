@@ -8,6 +8,7 @@ import {
   stockItem,
   zlItem,
   jeItem,
+  lyItem,
 } from './types';
 import { time, numDate } from './utils/time';
 import { marketCode } from './utils/market';
@@ -322,18 +323,17 @@ export async function getZlStocks(pz: number = 50): Promise<zlItem[]> {
  * 行业领涨股，龙一
  * @return {*}  {Promise<stockItem[]>}
  */
-export async function getLyStocks(): Promise<stockItem[]> {
-  //why this is not update
+export async function getLyStocks(): Promise<lyItem[]> {
   try {
     const url = `https://100.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=70&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f104&fs=m:90+t:2+f:!50&fields=f128,f140`;
-    let result: stockItem[] = [];
+    let result: lyItem[] = [];
     const { data } = await fetchData(url, 1000, 3);
     if (data && data.diff) {
       for (const item of data.diff) {
-        result.push({ c: item['f140'] });
+        result.push({ c: item['f140'], n: item['f128'] });
       }
     }
-    result = await cleanCodes(result);
+    result = await cleanCodes(result) as lyItem[];
     return result;
   } catch (error) {
     console.error('DFCFBOT->getLyStocks:', error);
