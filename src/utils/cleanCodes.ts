@@ -7,14 +7,12 @@ import { issh, issz } from './shsz';
  * @return {*}
  */
 export async function cleanCodes(data: stockItem[]) {
-  if (data.length) {
-    return data.filter((s: stockItem) => {
-      let notNewOrSt = true;
-      if (s['n' as keyof object]) {
-        notNewOrSt = /^((?!n|st).)*$/i.test(s['n' as keyof object]);
-      }
-      return (issz(s.c) || issh(s.c)) && notNewOrSt;
-    });
-  }
-  return [];
+  return data.filter((s: stockItem) => {
+    let newOrSt = false;
+    if (s['n' as keyof object]) {
+      const regExp = /st|n/i;
+      newOrSt = regExp.test(s['n' as keyof object]);
+    }
+    return (issz(s.c) || issh(s.c)) && !newOrSt;
+  });
 }
