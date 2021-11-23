@@ -87,6 +87,7 @@ export interface jeItem {
 export interface lyItem {
   c: string;
   n: string;
+  zdp: number;
 }
 export type zhouqi = 'W' | 'D' | '60m' | '15m' | 'm';
 
