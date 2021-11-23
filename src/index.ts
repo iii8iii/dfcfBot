@@ -333,7 +333,7 @@ export async function getLyStocks(): Promise<lyItem[]> {
         result.push({ c: item['f140'], n: item['f128'] });
       }
     }
-    result = await cleanCodes(result) as lyItem[];
+    result = (await cleanCodes(result)) as lyItem[];
     return result;
   } catch (error) {
     console.error('DFCFBOT->getLyStocks:', error);
