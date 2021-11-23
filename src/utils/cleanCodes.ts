@@ -8,7 +8,7 @@ import { issh, issz } from './shsz';
  */
 export async function cleanCodes(data: stockItem[]) {
   if (data.length) {
-    data = data.filter((s: stockItem) => {
+    return data.filter((s: stockItem) => {
       let notNewOrSt = true;
       if (s['n' as keyof object]) {
         notNewOrSt = /^((?!n|st).)*$/i.test(s['n' as keyof object]);
